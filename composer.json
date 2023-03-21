@@ -17,8 +17,7 @@
     ],
     "require": {
         "php": ">= 7.1",
-        "laravel/framework": ">= 5.8",
-        "jitendrajp/laravel-upsert": "dev-master"
+        "laravel/framework": ">= 5.8"
     },
     "autoload": {
         "psr-4": {
@@ -33,14 +32,7 @@
     "scripts": {
         "test": "vendor/bin/phpunit",
         "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
-
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "git@github.com:jitendrajp/laravel-upsert.git"
-        }
-    ],
     "config": {
         "sort-packages": true
     },

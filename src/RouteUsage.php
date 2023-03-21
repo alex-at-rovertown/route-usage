@@ -3,12 +3,9 @@
 namespace Julienbourdeau\RouteUsage;
 
 use Illuminate\Database\Eloquent\Model;
-use Staudenmeir\LaravelUpsert\Eloquent\HasUpsertQueries;
 
 class RouteUsage extends Model
 {
-    use HasUpsertQueries;
-
     protected $table = 'route_usage';
 
     protected static $unguarded = true;
