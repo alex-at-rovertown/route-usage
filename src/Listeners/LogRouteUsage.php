@@ -85,7 +85,7 @@ class LogRouteUsage
             'identifier'  => sha1($method . $path . $action . $status_code),
             'date'        => date(config('route-usage.date-format', 'Y-m-d H:i:s')),
             'host'        => $request->getHttpHost(),
-            'environment' => config('route-usage.environment'),
+            'environment' => config('app.env'),
         ];
     }
 }
