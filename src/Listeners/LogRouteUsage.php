@@ -14,15 +14,19 @@ class LogRouteUsage
 
         extract($this->extractAttributes($event));
 
-        RouteUsage::upsert([
-                               'identifier' => $identifier,
-                           ], [
-                               'method' => $method,
-                               'path' => $path,
-                               'status_code' => $status_code,
-                               'action' => $action,
-                               'updated_at' => $date,
-                           ]);
+        RouteUsage::upsert(
+            [
+                'identifier'  => $identifier,
+                'method'      => $method,
+                'path'        => $path,
+                'status_code' => $status_code,
+                'action'      => $action,
+                'updated_at'  => $date,
+            ],
+            [
+                'identifier',
+            ]
+        );
     }
 
     protected function shouldLogUsage($event)
