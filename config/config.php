@@ -15,7 +15,7 @@ return [
 
     'excluding-regex' => [
         'name' => '/^(route-usage|nova|debugbar|horizon|telescope|telescope-api|__clockwork)\./',
-        'uri' => '/^nova/',
+        'uri'  => '/^nova/',
     ],
 
     /*
@@ -31,4 +31,6 @@ return [
     */
 
     'date-format' => 'Y-m-d H:i:s',
+
+    'environment' => config('app.env'),
 ];

@@ -18,6 +18,8 @@ class CreateRouteUsageTable extends Migration
             $table->text('path');
             $table->unsignedSmallInteger('status_code');
             $table->text('action')->nullable();
+            $table->string('host', 50);
+            $table->string('environment', 30);
             $table->timestamps();
 
             $table->unique('identifier');

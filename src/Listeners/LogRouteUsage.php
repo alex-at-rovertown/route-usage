@@ -2,6 +2,7 @@
 
 namespace Julienbourdeau\RouteUsage\Listeners;
 
+use Illuminate\Http\Request;
 use Julienbourdeau\RouteUsage\RouteUsage;
 
 class LogRouteUsage
@@ -22,6 +23,8 @@ class LogRouteUsage
                 'status_code' => $status_code,
                 'action'      => $action,
                 'updated_at'  => $date,
+                'host'        => $host,
+                'environment' => $environment,
             ],
             [
                 'identifier',
@@ -62,7 +65,7 @@ class LogRouteUsage
 
     protected function extractAttributes($event)
     {
-        $path = ($route = $event->request->route()) ? $route->uri : $event->request->getPathInfo();
+        $path   = ($route = $event->request->route()) ? $route->uri : $event->request->getPathInfo();
         $action = $route ? $route->getAction()['uses'] : null;
 
         if ($action instanceof \Closure) {
@@ -71,13 +74,18 @@ class LogRouteUsage
             $action = '[Unsupported]';
         }
 
+        /** @var Request $request */
+        $request = $event->request;
+
         return [
             'status_code' => $status_code = $event->response->getStatusCode(),
-            'method' => $method = $event->request->getMethod(),
-            'path' => $path,
-            'action' => $action,
-            'identifier' => sha1($method.$path.$action.$status_code),
-            'date' => date(config('route-usage.date-format', 'Y-m-d H:i:s')),
+            'method'      => $method = $event->request->getMethod(),
+            'path'        => $path,
+            'action'      => $action,
+            'identifier'  => sha1($method . $path . $action . $status_code),
+            'date'        => date(config('route-usage.date-format', 'Y-m-d H:i:s')),
+            'host'        => $request->getHttpHost(),
+            'environment' => config('route-usage.environment'),
         ];
     }
 }
