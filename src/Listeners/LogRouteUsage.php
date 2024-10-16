@@ -52,11 +52,11 @@ class LogRouteUsage
             return true;
         }
 
-        if (isset($regex['name']) && $regex['name'] && preg_match($regex['name'], $route->getName())) {
+        if (isset($regex['name']) && $regex['name'] && $route->getName() !== null && preg_match($regex['name'], $route->getName())) {
             return false;
         }
 
-        if (isset($regex['uri']) && $regex['uri'] && preg_match($regex['uri'], $route->uri)) {
+        if (isset($regex['uri']) && $regex['uri'] && $route->uri !== null && preg_match($regex['uri'], $route->uri)) {
             return false;
         }
 
