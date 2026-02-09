@@ -4,6 +4,7 @@ namespace Julienbourdeau\RouteUsage\Console\Commands;
 
 use Illuminate\Foundation\Console\RouteListCommand;
 use Julienbourdeau\RouteUsage\RouteUsage;
+use Symfony\Component\Console\Input\InputOption;
 
 class UsageRouteCommand extends RouteListCommand
 {
@@ -14,6 +15,40 @@ class UsageRouteCommand extends RouteListCommand
     protected $headers = ['Domain', 'Method', 'URI', 'Last used', 'Name', 'Action', 'Middleware'];
 
     protected $compactColumns = ['method', 'uri', 'last used', 'action'];
+
+    public function handle()
+    {
+        if (! $this->output->isVeryVerbose()) {
+            $this->router->flushMiddlewareGroups();
+        }
+
+        if (! $this->router->getRoutes()->count()) {
+            return $this->components->error("Your application doesn't have any routes.");
+        }
+
+        if (empty($routes = $this->getRoutes())) {
+            return $this->components->error("Your application doesn't have any routes matching the given criteria.");
+        }
+
+        if ($this->option('json')) {
+            $this->line(collect($routes)->values()->toJson());
+
+            return;
+        }
+
+        $headers = $this->option('compact')
+            ? ['Method', 'URI', 'Last used', 'Action']
+            : $this->headers;
+
+        $this->table($headers, $routes);
+    }
+
+    protected function getOptions()
+    {
+        return array_merge(parent::getOptions(), [
+            ['compact', 'c', InputOption::VALUE_NONE, 'Only show method, URI, last used, and action columns'],
+        ]);
+    }
 
     protected function getRoutes()
     {
