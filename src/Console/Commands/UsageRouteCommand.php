@@ -76,11 +76,10 @@ class UsageRouteCommand extends RouteListCommand
 
         return $routes->map(function ($route) use ($routeUsage) {
             $usageKey = $route['method'].'.'.$route['uri'];
-            $lastUsed = $routeUsage->has($usageKey) ?
-                $routeUsage->get($usageKey)->updated_at->diffForHumans()
-                : 'Never';
+            $usage = $routeUsage->get($usageKey);
+            $lastUsed = $usage ? $usage->updated_at->diffForHumans() : 'Never';
 
-            return $this->option('compact') ?
+            $row = $this->option('compact') ?
                 [
                     'method' => $route['method'],
                     'uri' => $route['uri'],
@@ -95,7 +94,15 @@ class UsageRouteCommand extends RouteListCommand
                     'action' => $route['action'],
                     'middleware' => $route['middleware'],
                 ];
-        })->toArray();
+
+            $row['_sort'] = $usage ? $usage->updated_at->timestamp : 0;
+
+            return $row;
+        })->sortByDesc('_sort')->map(function ($row) {
+            unset($row['_sort']);
+
+            return $row;
+        })->values()->toArray();
     }
 
     protected function splitRoutesByMethods(array $routes)
